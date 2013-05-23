@@ -1,3 +1,5 @@
+import org.joda.time.*;
+
 //Declare Globals
 int rSn; // randomSeed number. put into var so can be saved in file name. defaults to 47
 final float PHI = 0.618033989;
@@ -19,7 +21,6 @@ void setup() {
   c = new Clock();
   c.dataFileLoc = "tweets-hockeynight-apr-min.csv";
   c.loadData();
-  c.update();
 }
 
 
@@ -44,9 +45,9 @@ void screenCap() {
   String outputDir = "out/";
   String sketchName = "clock_Render_Test-";
   String randomSeedNum = "rS" + rSn + "-";
-  String dateTime = "" + year() + month() + day() + hour() + minute() + second();
+  String dateTimeStamp = "" + year() + nf(month(), 2) + nf(day(), 2) + nf(hour();
   String fileType = ".tif";
-  String fileName = outputDir + sketchName + randomSeedNum + dateTime + fileType;
+  String fileName = outputDir + sketchName + randomSeedNum + dateTimeStamp + fileType;
   save(fileName);
   println("Screen shot taken and saved to " + fileName);
 }
