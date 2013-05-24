@@ -4,7 +4,6 @@ import org.joda.time.*;
 int rSn; // randomSeed number. put into var so can be saved in file name. defaults to 47
 final float PHI = 0.618033989;
 PFont font;
-
 Clock c;
 
 
@@ -45,7 +44,7 @@ void screenCap() {
   String outputDir = "out/";
   String sketchName = "clock_Render_Test-";
   String randomSeedNum = "rS" + rSn + "-";
-  String dateTimeStamp = "" + year() + nf(month(), 2) + nf(day(), 2) + nf(hour();
+  String dateTimeStamp = "" + year() + nf(month(), 2) + nf(day(), 2) + nf(hour(), 2);
   String fileType = ".tif";
   String fileName = outputDir + sketchName + randomSeedNum + dateTimeStamp + fileType;
   save(fileName);
