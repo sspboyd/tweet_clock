@@ -9,7 +9,7 @@ Clock c;
 
 void setup() {
   background(255);
-  size(600, 600);
+  size(1100, 600);
   // rSn = 47;
   rSn = 29;
   // rSn = 18;

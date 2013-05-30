@@ -13,8 +13,8 @@ class Clock {
 
 
   Clock() {
-    barWidth = 3;
-    tIntvl = 5; 
+    barWidth = 6;
+    tIntvl = 2; 
     tScale = 1 * 60 * 24; // 1 min * mins / hr * hrs / day
     innerMargin = 10;
     outerMargin = 5;
@@ -67,7 +67,7 @@ class Clock {
 
   void update() {
     // set size and location variables
-    maxBarHeight = getMaxBarHeight();
+    maxBarHeight = getMaxBarHeight()/1.75;
     maxTwCount = getmaxTwCount();
 
     println("maxBarHeight, maxTwCount: " + maxBarHeight + ", " + maxTwCount);
@@ -81,17 +81,18 @@ class Clock {
       pushMatrix();
       translate(width/2, height/2);
       float rot = map(i, 0, tScale, 0, TWO_PI*2);
-      float rad = map(i, 0, tScale, 100, 300);
+      float rad = map(i, 0, tScale, innerMargin, (maxBarHeight+outerMargin)*3-maxBarHeight); // this isn't right yet
       rotate(rot-HALF_PI);
       float clr = map(i, 0, tScale, 225, 0);
+      clr = 47;
 
       fill(clr);
       noStroke();
 
       int twIntvlCount = getTweetCount(i);
       println("twIntvlCount: " + twIntvlCount);
-      float barHeight = map(twIntvlCount, 0, maxBarHeight, 1, maxTwCount);
-      rect(rad-100, 0, barHeight, barWidth);
+      float barHeight = map(twIntvlCount, 0, maxTwCount, 1, maxBarHeight);
+      rect(rad, barWidth, barHeight, barWidth);
       popMatrix();
 
       fill(0);
@@ -106,7 +107,9 @@ class Clock {
 
   int getMaxBarHeight(){
      // figure out max height of a line based on contraints of the 'pane' the clock sits in
-    int currMaxBH = (width/2-(innerMargin + (3 * outerMargin)))/1;
+    int currMaxBH = ((width/2) - innerMargin - (3 * outerMargin)) / 3;
+    println("base width calc: " + ((width/2) - innerMargin - (3 * outerMargin)));
+    println(currMaxBH);
     return currMaxBH;
   }
 
