@@ -8,16 +8,18 @@ class Clock {
   int tIntvl; // time interval is x mins
   int tScale; // time scale, eg 1 min * mins / hr * hrs / day
   int innerMargin, outerMargin;
+  String renderType;
 
   HashMap<String, ArrayList<String>> tweetsByMin;
 
 
   Clock() {
-    barWidth = 6;
-    tIntvl = 2; 
+    barWidth = 3;
+    tIntvl = 10; 
     tScale = 1 * 60 * 24; // 1 min * mins / hr * hrs / day
     innerMargin = 10;
     outerMargin = 5;
+    renderType = "line";
   }
 
   void loadData() {
@@ -67,8 +69,9 @@ class Clock {
 
   void update() {
     // set size and location variables
-    maxBarHeight = getMaxBarHeight()/1.75;
+    //maxBarHeight = getMaxBarHeight()/1.75;
     maxTwCount = getmaxTwCount();
+    maxBarHeight = getMaxBarHeight();
 
     println("maxBarHeight, maxTwCount: " + maxBarHeight + ", " + maxTwCount);
   }
@@ -76,7 +79,29 @@ class Clock {
 
   void render() {
     // display data
+if(renderType == "line"){
+    for (int i=0; i < tScale; i += tIntvl) {
+      float x = map(i, 0, tScale, 0, width);
+      float y = height/2;
+      // float barWidth = 2;
+      // float maxBarHeight = height/2;
 
+      pushMatrix();
+      fill(0);
+      noStroke();
+
+      int twIntvlCount = getTweetCount(i);
+      // println("twIntvlCount, maxTwCount: " + twIntvlCount+", "+maxTwCount);
+      float barHeight = map(twIntvlCount, 0, maxTwCount, 1, maxBarHeight);
+      println(twIntvlCount + ", " + maxTwCount + ", " + maxBarHeight);
+      // println("barHeight, maxBarHeight: " + barHeight + ", " + maxBarHeight);
+      rect(x, y, barWidth, -barHeight);
+
+      popMatrix();
+}
+}
+
+if(renderType == "spiral"){
     for (int i=0; i < tScale; i += tIntvl) {
       pushMatrix();
       translate(width/2, height/2);
@@ -103,23 +128,32 @@ class Clock {
       println("mod: twIntvlCount = " + i + ": " + twIntvlCount);
     }
   }
+  }
 
 
-  int getMaxBarHeight(){
+  float getMaxBarHeight(){
      // figure out max height of a line based on contraints of the 'pane' the clock sits in
-    int currMaxBH = ((width/2) - innerMargin - (3 * outerMargin)) / 3;
-    println("base width calc: " + ((width/2) - innerMargin - (3 * outerMargin)));
-    println(currMaxBH);
+    // int currMaxBH = ((width/2) - innerMargin - (3 * outerMargin)) / 3;
+    float currMaxBH = height/2.0;
+    // println("base width calc: " + ((width/2) - innerMargin - (3 * outerMargin)));
+    // println(currMaxBH);
     return currMaxBH;
   }
+
+    
+  /*
+  write out the results of 
+  getBarHeight to a Data object 
+  or is this premature optimization?
+  */
 
   int getmaxTwCount(){ 
     // get the max number of tweets in a minute 'bucket'
     int currMaxTC = 0;
-    for(ArrayList<String> tweet_ids : tweetsByMin.values()){
-      int count = tweet_ids.size();
-      if(count > currMaxTC) currMaxTC = count;
-    }
+        for (int i=0; i < tScale; i += tIntvl) {
+          int twIntvlCount = getTweetCount(i);
+          if(twIntvlCount > currMaxTC) currMaxTC = twIntvlCount;
+        }
     return currMaxTC;
   }
 
@@ -129,10 +163,10 @@ class Clock {
       String si = str(i);
       if(tweetsByMin.containsKey(si)){
         tCount += tweetsByMin.get(si).size(); 
-      // gets the array list length/size
+        // gets the array list length/size
+      }
     }
-  }
-  println("m: tCount = " + m + ", " + tCount);
+    println("m: tCount = " + m + ", " + tCount);
     return tCount;
   }
 
