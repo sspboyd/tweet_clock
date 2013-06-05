@@ -24,7 +24,7 @@
 #################################
 sketch.properties
 build-tmp/
-data/
+# data/
 out/
 srcFiles/
 *.jpg
